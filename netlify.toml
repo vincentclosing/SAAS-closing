@@ -3,7 +3,11 @@
   publish = ".next"
 
 [build.environment]
-  SECRETS_SCAN_OMIT_KEYS = "SESSION_SECRET"
+  # SESSION_SECRET: server-only, never bundled (see next.config.ts, which
+  # disables the Turbopack build cache that was leaking it into .next/cache).
+  # NEXT_PUBLIC_SUPABASE_URL: intentionally public by the NEXT_PUBLIC_
+  # convention — it's just the project's API endpoint, not a credential.
+  SECRETS_SCAN_OMIT_KEYS = "SESSION_SECRET,NEXT_PUBLIC_SUPABASE_URL"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
