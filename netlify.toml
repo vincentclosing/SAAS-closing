@@ -2,5 +2,13 @@
   command = "npm run build"
   publish = ".next"
 
+[build.environment]
+  # SESSION_SECRET is read only server-side (src/lib/session.ts is guarded
+  # by "server-only" and only used in Server Actions / proxy.ts). It shows
+  # up in server-side SSR chunks and the Turbopack build cache, which
+  # Netlify's secrets scanner flags even though neither is ever sent to
+  # the browser. Safe to omit from the scan.
+  SECRETS_SCAN_OMIT_KEYS = "SESSION_SECRET"
+
 [[plugins]]
   package = "@netlify/plugin-nextjs"
